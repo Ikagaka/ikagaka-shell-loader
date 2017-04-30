@@ -1,4 +1,3 @@
-import $ = require("jquery");
 import * as SU from "../Util/index";
 import * as ST from "../Model/SurfaceDefinitionTree";
 import * as STL from "../Loader/SurfaceDefinitionTreeLoader";
@@ -121,6 +120,19 @@ QUnit.test('SurfaceTreeLoader.loadSurfacesTxt', async (assert)=>{
   assert.ok(descript.collisionSort === "ascend");
   assert.ok(descript.animationSort === "ascend");
 });
+
+
+QUnit.module('ShellLoader');
+
+QUnit.test('load', async (assert)=>{
+  const nanikaDir = await NarLoader.loadFromURL('../nar/mobilemaster.nar');
+  const shellDir = cvt(nanikaDir.getDirectory('shell/master').asArrayBuffer());
+  const shell = await SL.load(shellDir);
+  assert.ok(shell.getBindGroups(0) !== null);
+  assert.ok(shell.getSurfaceAlias(0, 0) !== null);
+});
+
+
 
 
 

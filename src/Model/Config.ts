@@ -27,7 +27,7 @@ export class Config {
     this.enableRegion = false;
     this.position = "fixed";
   }
-  isBind(config: Config, scopeId: number, animId: number): boolean {
+  isBind(scopeId: number, animId: number): boolean {
     return isBind(this, scopeId, animId);
   }
   getAlignmenttodesktop(scopeId: number): "top" | "bottom" | "left" | "right" | "free" {

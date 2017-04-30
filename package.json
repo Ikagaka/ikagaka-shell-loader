@@ -54,7 +54,7 @@
     ]
   },
   "bugs": {
-    "url": "https://github.com/Ikagaka/Shell.js/issues"
+    "url": "https://github.com/Ikagaka/ikagaka-shell-loader/issues"
   },
   "typings": "./lib/index.d.ts",
   "main": "./lib/index.js",

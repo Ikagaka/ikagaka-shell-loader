@@ -10,29 +10,29 @@ export type Directory = {[filepath: string]: ()=> Promise<ArrayBuffer>};
 
 export class Shell {
   /** filepathに 対応するファイルの reader */
-  directory: Directory; 
+  readonly directory: Directory; 
 
   /** descript.txtをcsvと解釈した時の値 */
-  descript:     Descript; 
+  readonly descript:     Descript; 
   /** descript.txtをjsonと解釈した時の値 */
-  descriptJSON: JSONLike;
+  readonly descriptJSON: JSONLike;
   /** descript.txtから読み込めた設定の構造体 */
-  config:       Config;
+  readonly config:       Config;
 
   /** SurfacesTxt2Yamlの内容 */
-  surfacesTxt: SurfacesTxt;
+  readonly surfacesTxt: SurfacesTxt;
   /** このshell.jsが解釈しているShellのリソースツリー */
-  surfaceDefTree: SurfaceDefinitionTree;
+  readonly surfaceDefTree: SurfaceDefinitionTree;
   
-  constructor() {
-    this.directory = {};
+  constructor(a: Directory, b: Descript, c: JSONLike, d: Config, e: SurfacesTxt, f: SurfaceDefinitionTree) {
+    this.directory = a;
 
-    this.descript = {};
-    this.descriptJSON = {};
-    this.config = new Config();
+    this.descript = b;
+    this.descriptJSON = c;
+    this.config = d;
 
-    this.surfacesTxt = <SurfacesTxt>{};
-    this.surfaceDefTree = new SurfaceDefinitionTree();
+    this.surfacesTxt = e;
+    this.surfaceDefTree = f;
   }
   getSurfaceAlias(scopeId: number, surfaceId: number|string): number | null {
     return getSurfaceAlias(this, scopeId, surfaceId);

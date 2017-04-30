@@ -3,9 +3,9 @@
  */
 
 export class SurfaceDefinitionTree {
-  descript: SurfaceDescript;
-  surfaces: SurfaceDefinition[];
-  aliases:  { [aliasname: string]: number[]; }[];
+  readonly descript: SurfaceDescript;
+  readonly surfaces: SurfaceDefinition[];
+  readonly aliases:  { [aliasname: string]: number[]; }[];
   //regions: { [scopeID: number]: {[regionName: string]: ToolTipElement}; }; // 謎
   constructor(
     descript: SurfaceDescript=new SurfaceDescript(),
@@ -22,8 +22,8 @@ export class SurfaceDefinitionTree {
 export class SurfaceDescript {
   //version: number;
   //maxwidth: number;
-  collisionSort: string;
-  animationSort: string;
+  readonly collisionSort: string;
+  readonly animationSort: string;
   constructor(collisionSort="ascend", animationSort="ascend"){
     this.collisionSort = collisionSort;
     this.animationSort = animationSort;
@@ -33,18 +33,18 @@ export class SurfaceDescript {
 
 export class SurfaceDefinition {
   //characters: { sakura: string; }; // 謎
-  points: {
+  readonly points: {
     //centerx: number; centery: number; // SakuraAPI なにそれ
     basepos: { x: number | null, y: number | null };
   };
-  balloons: {
+  readonly balloons: {
     char: { offsetX: number; offsetY: number }[];
     offsetX: number;
     offsetY: number;
   };
-  collisions: SurfaceCollision[];
-  animations: SurfaceAnimation[];
-  elements:   SurfaceElement[];
+  readonly collisions: SurfaceCollision[];
+  readonly animations: SurfaceAnimation[];
+  readonly elements:   SurfaceElement[];
   constructor(
     elements:SurfaceElement[]=[],
     collisions:SurfaceCollision[]=[],
@@ -70,10 +70,10 @@ export class SurfaceDefinition {
 }
 
 export class SurfaceElement {
-  type: string;
-  file: string;
-  x: number;
-  y: number;
+  readonly type: string;
+  readonly file: string;
+  readonly x: number;
+  readonly y: number;
   constructor(type: string, file: string, x=0, y=0){
     this.type = type;
     this.file = file;
@@ -83,8 +83,8 @@ export class SurfaceElement {
 }
 
 export class SurfaceCollision {
-  name: string;
-  type: string;
+  readonly name: string;
+  readonly type: string;
   constructor(type: string, name: string){
     this.name = name;
     this.type = type;
@@ -94,10 +94,10 @@ export class SurfaceCollision {
 
 
 export class SurfaceCollisionRect extends SurfaceCollision {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
+  readonly left: number;
+  readonly top: number;
+  readonly right: number;
+  readonly bottom: number;
   constructor(name: string, left: number, top: number, right: number, bottom: number){
     super("rect", name);
     this.left = left;
@@ -108,10 +108,10 @@ export class SurfaceCollisionRect extends SurfaceCollision {
 }
 
 export class SurfaceCollisionEllipse extends SurfaceCollision {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
+  readonly left: number;
+  readonly top: number;
+  readonly right: number;
+  readonly bottom: number;
   constructor(name: string, left: number, top: number, right: number, bottom: number){
     super("ellipse", name);
     this.left = left;
@@ -122,9 +122,9 @@ export class SurfaceCollisionEllipse extends SurfaceCollision {
 }
 
 export class SurfaceCollisionCircle extends SurfaceCollision {
-  centerX: number;
-  centerY: number;
-  radius: number;
+  readonly centerX: number;
+  readonly centerY: number;
+  readonly radius: number;
   constructor(name: string, centerX: number, centerY: number, radius: number){
     super("circle", name);
     this.centerX = centerX;
@@ -134,7 +134,7 @@ export class SurfaceCollisionCircle extends SurfaceCollision {
 }
 
 export class SurfaceCollisionPolygon extends SurfaceCollision {
-  coordinates: { x: number; y: number; }[];
+  readonly coordinates: { x: number; y: number; }[];
   constructor(name: string, coordinates:{ x: number; y: number; }[] ){
     super("polygon", name);
     this.coordinates = coordinates;
@@ -144,10 +144,10 @@ export class SurfaceCollisionPolygon extends SurfaceCollision {
 
 
 export class SurfaceAnimation {
-  intervals: [string, number[]][]; // [command, args]
-  options: [string, number[]][]; // [command, args]
-  collisions: SurfaceCollision[];
-  patterns:   SurfaceAnimationPattern[];
+  readonly intervals: [string, number[]][]; // [command, args]
+  readonly options: [string, number[]][]; // [command, args]
+  readonly collisions: SurfaceCollision[];
+  readonly patterns:   SurfaceAnimationPattern[];
   constructor(
     intervals:[string, number[]][] = [["never", []]],
     options:[string, number[]][]=[],
@@ -164,12 +164,12 @@ export class SurfaceAnimation {
 }
 
 export class SurfaceAnimationPattern {
-  type: string;
-  surface: number;
-  wait: [number, number];
-  x: number;
-  y: number;
-  animation_ids: number[];
+  readonly type: string;
+  readonly surface: number;
+  readonly wait: [number, number];
+  readonly x: number;
+  readonly y: number;
+  readonly animation_ids: number[];
   constructor(
     type="ovelay",
     surface=-1,

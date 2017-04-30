@@ -10,13 +10,13 @@ export type JSONLike = string | number | { [key: string]: JSONLike };
 
 export class Config {
   // 以下 descript
-  public seriko: Seriko;
-  public menu: Menu;
-  public char: Char[];
+  seriko: Seriko;
+  menu: Menu;
+  char: Char[];
   // 以下 state
-  public bindgroup: { [charId: number]: { [bindgroupId: number]: boolean } }; //keyはbindgroupのid、値はその着せ替えグループがデフォルトでオンかどうかの真偽値
-  public enableRegion: boolean;
-  public position: "fixed"|"absolute";
+  bindgroup: { [charId: number]: { [bindgroupId: number]: boolean } }; //keyはbindgroupのid、値はその着せ替えグループがデフォルトでオンかどうかの真偽値
+  enableRegion: boolean;
+  position: "fixed"|"absolute";
 
   constructor(){
     this.seriko = new Seriko();
@@ -26,6 +26,12 @@ export class Config {
     this.bindgroup = [];
     this.enableRegion = false;
     this.position = "fixed";
+  }
+  isBind(config: Config, scopeId: number, animId: number): boolean {
+    return isBind(this, scopeId, animId);
+  }
+  getAlignmenttodesktop(scopeId: number): "top" | "bottom" | "left" | "right" | "free" {
+    return getAlignmenttodesktop(this, scopeId);
   }
 }
 
@@ -195,7 +201,7 @@ export class BindGroup {
 }
 
 
-export function isBind(config: Config, scopeId: number, animId: number): boolean {
+function isBind(config: Config, scopeId: number, animId: number): boolean {
   const {bindgroup} = config;
   if (bindgroup[scopeId] == null){ return false; }
   if (bindgroup[scopeId][animId] === false){ return false; }
@@ -204,7 +210,7 @@ export function isBind(config: Config, scopeId: number, animId: number): boolean
 
 
 
-export function getAlignmenttodesktop(config: Config, scopeId: number): "top" | "bottom" | "left" | "right" | "free" {
+function getAlignmenttodesktop(config: Config, scopeId: number): "top" | "bottom" | "left" | "right" | "free" {
   // config.char[surfaceId] は任意設定なので存在確認しないといけない
   if(config.char[scopeId] != null && typeof config.char[scopeId].seriko.alignmenttodesktop === "string"){
     // 個別設定

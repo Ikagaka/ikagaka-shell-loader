@@ -19,17 +19,7 @@ export async function load(directory: Directory): Promise<Shell>{
   const {surfacesTxt, surfaceDefTree} = await loadSurfacesTxt(directory);
   await loadSurfaceTable(directory);
   const _surfaceDefTree = await loadSurfacePNG(directory, surfaceDefTree);
-  const shell = new Shell();
-  
-  shell.directory = directory;
-
-  shell.descript = descript;
-  shell.descriptJSON = descriptJSON;
-  shell.config = config;
-
-  shell.surfacesTxt = surfacesTxt;
-  shell.surfaceDefTree = _surfaceDefTree;
-
+  const shell = new Shell(directory, descript, descriptJSON, config, surfacesTxt, _surfaceDefTree);
   return shell;
 }
 

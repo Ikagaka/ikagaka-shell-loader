@@ -67,7 +67,6 @@
     },
     "files": [
         "src/decls/encoding.d.ts",
-        "src/decls/surfaces_txt2yaml.d.ts",
         "src/decls/NarLoader.d.ts",
         "src/decls/globals.d.ts",
         "src/Test/index.ts",

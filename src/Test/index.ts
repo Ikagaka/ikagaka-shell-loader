@@ -5,7 +5,8 @@ import ST2Y = require("surfaces_txt2yaml");
 import * as SC from "../Model/Config";
 import * as SCL from "../Loader/ConfigLoader";
 import * as SL from "../Loader/ShellLoader";
-import {NarLoader} from "narloader";
+import * as NarLoader from "narloader";
+import { NanikaContainerSyncDirectory } from "nanika-storage";
 import * as SML from "../Loader/ShellLoader";
 import * as SH from "../Model/Shell";
 
@@ -22,8 +23,8 @@ const qunitTap  = <Function>require("qunit-tap");
 empower(QUnit.assert, formatter(), { destructive: true });
 qunitTap(QUnit, function() { console.log.apply(console, arguments); }, {showSourceOnFailure: false});
 
-function cvt(a: {[a:string]: ArrayBuffer}): {[a:string]: ()=> Promise<ArrayBuffer>} {
-  return Object.keys(a).reduce((o,key)=> (o[key] = ()=> Promise.resolve(a[key]), o), {});
+function cvt(a: NanikaContainerSyncDirectory): {[a:string]: ()=> Promise<ArrayBuffer>} {
+  return a.childrenAllSync().reduce((o,file)=> (o[a.relative(file.path).path] = ()=> Promise.resolve(file.readFileSync().buffer), o), {});
 }
 
 
@@ -80,8 +81,8 @@ QUnit.module('ShellConfigLoader');
 
 
 QUnit.test('ShellConfigLoader.loadFromJSONLike', async (assert)=>{
-  const dir = await NarLoader.loadFromURL("/nar/mobilemaster.nar");
-  const dic = cvt(dir.getDirectory("shell/master").asArrayBuffer());
+  const dir = await NarLoader.loadFromURI("/nar/mobilemaster.nar");
+  const dic = cvt(dir.new("shell/master") as NanikaContainerSyncDirectory);
   const descript = await SL.loadDescript(dic);
   const config = await SCL.loadFromJSONLike(descript.descript);
 
@@ -104,8 +105,8 @@ QUnit.test('ShellConfigLoader.loadFromJSONLike', async (assert)=>{
 QUnit.module('SurfaceTreeLoader');
 
 QUnit.test('SurfaceTreeLoader.loadSurfacesTxt', async (assert)=>{
-  const nanikaDir = await NarLoader.loadFromURL('../nar/mobilemaster.nar');
-  const shellDir = cvt(nanikaDir.getDirectory('shell/master').asArrayBuffer());
+  const nanikaDir = await NarLoader.loadFromURI('../nar/mobilemaster.nar');
+  const shellDir = cvt(nanikaDir.new('shell/master') as NanikaContainerSyncDirectory);
   const surfaceTree = await SL.loadSurfacesTxt(shellDir);
   const {aliases, surfaces, descript} = surfaceTree.surfaceDefTree;
   assert.ok(Array.isArray(aliases));
@@ -115,7 +116,7 @@ QUnit.test('SurfaceTreeLoader.loadSurfacesTxt', async (assert)=>{
     assert.ok(Array.isArray(elements)   &&   elements.every((elm)=> elm instanceof ST.SurfaceElement ));
     assert.ok(Array.isArray(collisions) && collisions.every((col)=> col instanceof ST.SurfaceCollision ));
     assert.ok(Array.isArray(animations) && animations.every((anm)=> anm instanceof ST.SurfaceAnimation ));
-    
+
   });
   assert.ok(descript.collisionSort === "ascend");
   assert.ok(descript.animationSort === "ascend");
@@ -125,8 +126,8 @@ QUnit.test('SurfaceTreeLoader.loadSurfacesTxt', async (assert)=>{
 QUnit.module('ShellLoader');
 
 QUnit.test('load', async (assert)=>{
-  const nanikaDir = await NarLoader.loadFromURL('../nar/mobilemaster.nar');
-  const shellDir = cvt(nanikaDir.getDirectory('shell/master').asArrayBuffer());
+  const nanikaDir = await NarLoader.loadFromURI('../nar/mobilemaster.nar');
+  const shellDir = cvt(nanikaDir.new('shell/master') as NanikaContainerSyncDirectory);
   const shell = await SL.load(shellDir);
   assert.ok(shell.getBindGroups(0) !== null);
   assert.ok(shell.getSurfaceAlias(0, 0) !== null);
